@@ -1,6 +1,5 @@
 import React from "react";
 import { Award, Zap } from "lucide-react";
-import { useUserData } from "../../hooks/useUserData";
 
 const PointsBalanceCard = ({userData}) => {
   const points = userData?.points || 0;

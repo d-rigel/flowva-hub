@@ -46,16 +46,6 @@ const LoginPage = ({ onNavigate, onLogin }) => {
   setLoading(false);
 };
 
-//   const handleGoogleLogin = async () => {
-//     setLoading(true);
-//     const { data, error } = await supabase.auth.signInWithOAuth({ provider: 'google' });
-    
-//     if (!error && data.user) {
-//       onLogin(data.user);
-//       setTimeout(() => onNavigate('dashboard'), 500);
-//     }
-//     setLoading(false);
-//   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 to-blue-500 flex items-center justify-center p-4">

@@ -1,3 +1,4 @@
+
 import React from "react";
 import PointsBalanceCard from "./PointsBalanceCard";
 import DailyStreakCard from "./DailyStreakCard";
@@ -8,7 +9,6 @@ import { Award, Share2, Users } from "lucide-react";
 
 const EarnPointsTab = ({userData, onClaimPoints, canClaimToday, isClaiming }) => {
       
-
   return (
     <>
       <h2 className="text-2xl font-bold text-gray-900 mb-6 border-l-4 border-purple-600 pl-4">
@@ -113,7 +113,7 @@ const EarnPointsTab = ({userData, onClaimPoints, canClaimToday, isClaiming }) =>
           <div className="flex gap-2">
             <input
               type="text"
-              value={`https://flowvahub.com/ref/${userData.id}`}
+              value={`https://flowvahub.com/ref/${userData?.id}`}
               readOnly
               className="flex-1 px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm"
             />

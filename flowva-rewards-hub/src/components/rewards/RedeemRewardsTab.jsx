@@ -1,82 +1,34 @@
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import RewardCard from "./RewardCard";
+import { rewardsService } from "../../services/rewardsService";
 
 const RedeemRewardsTab = ({ userData }) => {
   const [rewardsTab, setRewardsTab] = useState("all");
+  const [rewards, setRewards] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const rewards = [
-    {
-      id: 1,
-      name: "$5 Bank Transfer",
-      icon: "💰",
-      points: 5000,
-      status: "locked",
-      description:
-        "The $5 equivalent will be transferred to your bank account.",
-    },
-    {
-      id: 2,
-      name: "$5 PayPal International",
-      icon: "💰",
-      points: 5000,
-      status: "locked",
-      description:
-        "Receive a $5 PayPal balance transfer directly to your PayPal account email.",
-    },
-    {
-      id: 3,
-      name: "$5 Virtual Visa Card",
-      icon: "🎁",
-      points: 5000,
-      status: "locked",
-      description:
-        "Use your $5 prepaid card to shop anywhere Visa is accepted online.",
-    },
-    {
-      id: 4,
-      name: "$5 Apple Gift Card",
-      icon: "🎁",
-      points: 5000,
-      status: "locked",
-      description:
-        "Redeem this $5 Apple Gift Card for apps, games, music, movies, and more on the App Store and iTunes.",
-    },
-    {
-      id: 5,
-      name: "$5 Google Play Card",
-      icon: "🎁",
-      points: 5000,
-      status: "locked",
-      description:
-        "Use this $5 Google Play Gift Card to purchase apps, games, movies, books, and more on the Google Play Store.",
-    },
-    {
-      id: 6,
-      name: "$5 Amazon Gift Card",
-      icon: "🎁",
-      points: 5000,
-      status: "locked",
-      description:
-        "Get a $5 digital gift card to spend on your favorite tools or platforms.",
-    },
-    {
-      id: 7,
-      name: "$10 Amazon Gift Card",
-      icon: "🎁",
-      points: 10000,
-      status: "locked",
-      description:
-        "Get a $10 digital gift card to spend on your favorite tools or platforms.",
-    },
-    {
-      id: 8,
-      name: "Free Udemy Course",
-      icon: "📚",
-      points: 0,
-      status: "coming-soon",
-      description: "Coming Soon!",
-    },
-  ];
+  console.log("rewards:", rewards)  // Fetch rewards on component mount
+  useEffect(() => {
+    const fetchRewards = async () => {
+      try {
+        setLoading(true);
+        const { data, error } = await rewardsService.getAllRewards();
+        
+        if (error) throw error;
+        
+        setRewards(data || []);
+      } catch (err) {
+        console.error("Error fetching rewards:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRewards();
+  }, []);
 
   const filteredRewards = rewards.filter((reward) => {
     if (rewardsTab === "all") return true;
@@ -95,6 +47,28 @@ const RedeemRewardsTab = ({ userData }) => {
       return false;
     }).length;
   };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading rewards...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+        <p className="text-red-600 font-semibold mb-2">Error loading rewards</p>
+        <p className="text-red-500 text-sm">{error}</p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -131,18 +105,27 @@ const RedeemRewardsTab = ({ userData }) => {
         ))}
       </div>
 
-      {/* Rewards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredRewards.map((reward) => (
-          <RewardCard
-            key={reward.id}
-            reward={reward}
-            userPoints={userData?.points || 0}
-          />
-        ))}
-      </div>
+      {/* Empty state */}
+      {filteredRewards.length === 0 ? (
+        <div className="text-center py-12">
+          <p className="text-gray-500">No rewards found in this category</p>
+        </div>
+      ) : (
+        /* Rewards Grid */
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredRewards.map((reward) => (
+            <RewardCard
+              key={reward.id}
+              reward={reward}
+              userPoints={userData?.points || 0}
+            />
+          ))}
+        </div>
+      )}
     </>
   );
 };
 
 export default RedeemRewardsTab;
+
+

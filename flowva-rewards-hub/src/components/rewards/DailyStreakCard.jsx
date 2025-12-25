@@ -1,10 +1,7 @@
 import React from "react";
 import { Calendar, Zap } from "lucide-react";
 
-
 const DailyStreakCard = ({ userData, onClaimPoints, claimedToday, isClaiming }) => {
-console.log("isClaiming in DailyStreakCard:", isClaiming);
-console.log("hasClaimedToday in DailyStreakCard:", claimedToday);
   const streak = userData?.daily_streak || 0;
   const currentDay = new Date().getDay();
 

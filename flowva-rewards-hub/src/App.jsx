@@ -37,59 +37,84 @@ const App = () => {
     }
   };
 
+
   useEffect(() => {
-    // Only check session, NO user data loading here
-    const checkSession = async () => {
+  const checkUrlHash = () => {
+    const hash = window.location.hash.substring(1);
+    const params = new URLSearchParams(hash);
+    
+    if (params.get('type') === 'recovery') {
+      setCurrentPage('reset-password');
+      return true; 
+    }
+    // check for email verification 
+    if (params.get('type') === 'signup') {
+      setCurrentPage('verify-email');
+      window.history.replaceState({}, '', window.location.pathname);
+      return true;
+    }
+    return false; 
+  };
+
+  // Check hash immediately on mount
+  const hashWasProcessed = checkUrlHash();
+
+  //checking for existing session if no auth hash was found
+  const checkSession = async () => {
+    if (!hashWasProcessed) {
       const { data } = await supabase.auth.getSession();
       if (data.session?.user) {
         setUser(data.session.user);
         setCurrentPage('dashboard');
       }
-      setAuthLoading(false);
-    };
-    checkSession();
-
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-  console.log('Auth event:', event);
+    }
+    setAuthLoading(false);
+  };
   
-  if (event === 'SIGNED_IN' && session) {
-    setUser(session.user);
-    setCurrentPage('dashboard');
-    setTimeout(() => loadUserData(session.user.id), 0);
-  }
-  
-  if (event === 'PASSWORD_RECOVERY') {
-    setCurrentPage('reset-password');
-  }
-  
-  if (event === 'SIGNED_OUT') {
-    setUser(null);
-    setUserData(null);
-    setCurrentPage('login');
-  }
-});
+  checkSession();
 
+  const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+    
+    switch (event) {
+      case 'PASSWORD_RECOVERY':
+        setCurrentPage('reset-password');
+        break;
+        
+      case 'SIGNED_IN':
+      case 'TOKEN_REFRESHED':
+        if (session?.user && currentPage !== 'reset-password') {
+          setUser(session.user);
+          setCurrentPage('dashboard');
+        }
+        break;
+        
+      case 'SIGNED_OUT':
+        setUser(null);
+        setUserData(null);
+        setCurrentPage('login');
+        break;
 
-    // Auth listener - NO async/await Supabase calls here!
-    // const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-    //   console.log('Auth event:', event);
-      
-    //   if (event === 'SIGNED_IN' && session) {
-    //     setUser(session.user);
-    //     setCurrentPage('dashboard');
-    //     // Defer user data loading with setTimeout to avoid deadlock
-    //     setTimeout(() => loadUserData(session.user.id), 0);
-    //   }
-      
-    //   if (event === 'SIGNED_OUT') {
-    //     setUser(null);
-    //     setUserData(null);
-    //     setCurrentPage('login');
-    //   }
-    // });
+      case 'SIGNED_UP':
+        setUser(null);
+        setUserData(null);
+        setCurrentPage('login');
+        break;
+       
+      case 'USER_CONFIRMATION_EXPIRED':
+        setUser(null);
+        setUserData(null);
+        setCurrentPage('verification-expired');
+        break;
+      default:
+        break;
+    }
+  });
 
-    return () => authListener?.subscription?.unsubscribe();
-  }, []);
+  return () => {
+    authListener?.subscription?.unsubscribe();
+  };
+}, []);
+
 
   // Separate effect for loading user data when user changes
   useEffect(() => {
@@ -130,17 +155,19 @@ const App = () => {
   if (currentPage === 'verification-expired') {
     return <VerificationExpiredPage onNavigate={setCurrentPage} />;
   }
-  
-  if (currentPage === 'dashboard' && user && user.id) {
-    return (
-      <Dashboard 
-        user={user} 
-        userData={userData} 
-        setUserData={setUserData} 
-        handleLogout={handleLogout} 
-      />
-    );
-  }
+
+
+  if (currentPage === 'dashboard' && user) {
+  return (
+    <Dashboard 
+      user={user} 
+      userData={userData}
+      setUserData={setUserData}
+      handleLogout={handleLogout} 
+    />
+  );
+}
+
 
   return <LoginPage onNavigate={setCurrentPage} onLogin={setUser} />;
 };
@@ -157,143 +184,6 @@ export default App;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// ---------------
-// import React, { useState, useEffect } from 'react';
-// import './App.css';
-// import LoadingScreen from './components/common/LoadingScreen';
-// import LoginPage from './components/auth/LoginPage';
-// import SignUpPage from './components/auth/SignUpPage';
-// import ForgotPasswordPage from './components/auth/ForgotPasswordPage';
-// import VerificationExpiredPage from './components/auth/VerificationExpiredPage';
-// import Dashboard from './components/dashboard/Dashboard';
-// import { supabase } from './services/supabase';
-// import { userService } from './services/userService'; // Import your user service
-
-// const App = () => {
-//   const [currentPage, setCurrentPage] = useState('login');
-//   const [user, setUser] = useState(null);
-//   const [userData, setUserData] = useState(null); // ADD THIS STATE
-//   const [loading, setLoading] = useState(true);
-
-//   // Function to load user data
-//   const loadUserData = async (userId) => {
-//     try {
-//       const { data, error } = await userService.getUserData(userId);
-//       if (error) {
-//         console.error('Error loading user data:', error);
-//         // If no data exists, create it
-//         const { data: newData } = await userService.createOrGetUserData(userId);
-//         setUserData(newData);
-//       } else {
-//         setUserData(data);
-//       }
-//     } catch (error) {
-//       console.error('Failed to load user data:', error);
-//     }
-//   };
-
-//   useEffect(() => {
-//     checkSession();
-    
-//     const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
-//       console.log('Auth event:', event);
-      
-//       if (event === 'SIGNED_IN' && session) {
-//         setUser(session.user);
-//         // Load user data when signed in
-//         if (session.user.id) {
-//           await loadUserData(session.user.id);
-//         }
-//         setCurrentPage('dashboard');
-//       }
-      
-//       if (event === 'SIGNED_OUT') {
-//         setUser(null);
-//         setUserData(null); // Clear user data on logout
-//         setCurrentPage('login');
-//       }
-//     });
-
-//     return () => {
-//       authListener?.subscription?.unsubscribe();
-//     };
-//   }, []);
-
-//   const checkSession = async () => {
-//     const { data } = await supabase.auth.getSession();
-//     if (data.session && data.session.user) {
-//       setUser(data.session.user);
-//       // Load user data on initial session check
-//       if (data.session.user.id) {
-//         await loadUserData(data.session.user.id);
-//       }
-//       setCurrentPage('dashboard');
-//     }
-//     setLoading(false);
-//   };
-
-//   const handleLogout = async () => {
-//     console.log("Logging out user:", user);
-//     await supabase.auth.signOut();
-//     setUser(null);
-//     setUserData(null); // Clear user data
-//     setCurrentPage('login');
-//   };
-
-//   if (loading) {
-//     return <LoadingScreen />;
-//   }
-
-//   if (currentPage === 'login') {
-//     return <LoginPage onNavigate={setCurrentPage} onLogin={setUser} />;
-//   }
-  
-//   if (currentPage === 'signup') {
-//     return <SignUpPage onNavigate={setCurrentPage} />;
-//   }
-  
-//   if (currentPage === 'forgot-password') {
-//     return <ForgotPasswordPage onNavigate={setCurrentPage} />;
-//   }
-  
-//   if (currentPage === 'verification-expired') {
-//     return <VerificationExpiredPage onNavigate={setCurrentPage} />;
-//   }
-  
-//   if (currentPage === 'dashboard' && user && user.id) {
-//     return (
-//       <Dashboard 
-//         user={user} 
-//         userData={userData} // PASS USERDATA HERE
-//         setUserData={setUserData} // PASS SETTER TO UPDATE FROM CHILD
-//         handleLogout={handleLogout} 
-//       />
-//     );
-//   }
-
-//   return <LoginPage onNavigate={setCurrentPage} onLogin={setUser} />;
-// };
-
-// export default App;
 
 
 

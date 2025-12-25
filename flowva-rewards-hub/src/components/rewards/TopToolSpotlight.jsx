@@ -23,10 +23,10 @@ const TopToolSpotlight = () => {
 
       <div className="flex gap-3">
         <button className="flex-1 bg-white/20 backdrop-blur-sm hover:bg-white/30 py-2 rounded-lg font-semibold transition duration-200 flex items-center justify-center gap-2">
-          <Users className="w-4 h-4" />
+          <Users className="w-2 h-2" />
           Sign up
         </button>
-        <button className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 px-6 py-2 rounded-lg font-semibold transition duration-200 flex items-center gap-2 shadow-lg">
+        <button className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 px-4 py-2 rounded-lg font-semibold transition duration-200 flex items-center gap-2 shadow-lg">
           <Gift className="w-4 h-4" />
           Claim 50 pts
         </button>
