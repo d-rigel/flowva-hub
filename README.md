@@ -4,6 +4,8 @@ A modern rewards and points management system built with React and Supabase. Use
 
 ![Flowva Logo](https://img.shields.io/badge/Flowva-Rewards%20Hub-8B5CF6?style=for-the-badge&logo=react)
 
+**Live deployment** (https://flowva-i8zmaze1m-rigel4ggmailcoms-projects.vercel.app?_vercel_share=qAIp9BVdcnN71EJXRPNdZHz728Wde2mp)
+
 ## ✨ Features
 
 ### 🎯 Core Functionality

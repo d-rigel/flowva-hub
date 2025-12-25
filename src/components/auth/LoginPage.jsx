@@ -10,6 +10,8 @@ const LoginPage = ({ onNavigate, onLogin }) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  console.log("Supabase URL Check:", import.meta.env.VITE_SUPABASE_URL);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
