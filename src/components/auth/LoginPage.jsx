@@ -36,12 +36,11 @@ const LoginPage = ({ onNavigate, onLogin }) => {
   const { data, error } = await supabase.auth.signInWithOAuth({ 
     provider: 'google',
     options: {
-      redirectTo: `${helpers.getURL()}/auth/callback`
+      // redirectTo: `${window.location.origin}/auth/callback`
+      redirectTo: `${window.location.origin}`
     }
     
   });
-  
-  console.log("Google Login data:", data);
   if (error) {
     setError(error.message);
   }
