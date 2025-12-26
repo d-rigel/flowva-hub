@@ -9,7 +9,6 @@ const RedeemRewardsTab = ({ userData }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  console.log("rewards:", rewards)  // Fetch rewards on component mount
   useEffect(() => {
     const fetchRewards = async () => {
       try {

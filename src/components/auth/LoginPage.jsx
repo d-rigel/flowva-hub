@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../services/supabase';
 import { AlertCircle } from 'lucide-react';
-import { helpers } from '../../utils/helpers';
 
 
 const LoginPage = ({ onNavigate, onLogin }) => {
@@ -11,7 +10,6 @@ const LoginPage = ({ onNavigate, onLogin }) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  console.log("Supabase URL Check:", import.meta.env.VITE_SUPABASE_URL);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -36,7 +34,6 @@ const LoginPage = ({ onNavigate, onLogin }) => {
   const { data, error } = await supabase.auth.signInWithOAuth({ 
     provider: 'google',
     options: {
-      // redirectTo: `${window.location.origin}/auth/callback`
       redirectTo: `${window.location.origin}`
     }
     

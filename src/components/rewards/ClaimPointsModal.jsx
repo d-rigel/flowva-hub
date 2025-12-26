@@ -9,7 +9,7 @@ const ClaimPointsModal = ({ isOpen, onClose }) => {
       <div className="bg-white rounded-2xl p-8 max-w-md w-full text-center relative animate-fadeIn">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
         >
           <X className="w-6 h-6" />
         </button>
@@ -35,7 +35,7 @@ const ClaimPointsModal = ({ isOpen, onClose }) => {
 
         <button
           onClick={onClose}
-          className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded-lg transition duration-200"
+          className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded-lg transition duration-200 cursor-pointer"
         >
           Awesome!
         </button>

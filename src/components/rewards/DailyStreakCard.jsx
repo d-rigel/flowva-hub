@@ -41,7 +41,7 @@ const DailyStreakCard = ({ userData, onClaimPoints, claimedToday, isClaiming }) 
         onClick={onClaimPoints}
          disabled={isClaiming || claimedToday}
         className={`w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-3 rounded-xl transition duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed ${claimedToday ? 'claimed' : ''}`}
-        // className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-3 rounded-xl transition duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+        
       >
         <Zap className="w-5 h-5" />
           {claimedToday 

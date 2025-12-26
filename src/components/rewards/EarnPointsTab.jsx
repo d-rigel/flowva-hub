@@ -5,10 +5,8 @@ import DailyStreakCard from "./DailyStreakCard";
 import TopToolSpotlight from "./TopToolSpotlight";
 import { Award, Share2, Users } from "lucide-react";
 
-
-
 const EarnPointsTab = ({userData, onClaimPoints, canClaimToday, isClaiming }) => {
-      
+    
   return (
     <>
       <h2 className="text-2xl font-bold text-gray-900 mb-6 border-l-4 border-purple-600 pl-4">
@@ -118,7 +116,7 @@ const EarnPointsTab = ({userData, onClaimPoints, canClaimToday, isClaiming }) =>
               className="flex-1 px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm"
             />
             <button
-              className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition duration-200"
+              className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition duration-200 cursor-pointer"
               onClick={() => {
                 navigator.clipboard.writeText(
                   `https://flowvahub.com/ref/${userData.id}`

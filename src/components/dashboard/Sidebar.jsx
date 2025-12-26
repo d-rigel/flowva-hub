@@ -1,6 +1,6 @@
 import React from 'react';
 import NavItem from './NavItem';
-import { Home, Compass, BookOpen, Bell, Layers, CreditCard, Gift, Settings } from 'lucide-react';
+import { Home, Compass, BookOpen, Layers, CreditCard, Gift, Settings } from 'lucide-react';
 
 const Sidebar = ({ user, handleLogout }) => {
   return (
@@ -40,7 +40,7 @@ const Sidebar = ({ user, handleLogout }) => {
           </div>
           <button
             onClick={handleLogout}
-            className="text-gray-400 hover:text-gray-600 flex-shrink-0"
+            className="text-gray-400 hover:text-gray-600 flex-shrink-0 cursor-pointer"
             title="Logout"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

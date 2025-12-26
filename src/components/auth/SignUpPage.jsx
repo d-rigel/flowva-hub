@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../services/supabase';
 import { AlertCircle, CheckCircle, Shield, ShieldOff } from 'lucide-react';
-import { helpers } from '../../utils/helpers';
 
 const SignUpPage = ({ onNavigate }) => {
   const [email, setEmail] = useState('');

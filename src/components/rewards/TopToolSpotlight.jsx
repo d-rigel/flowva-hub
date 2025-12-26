@@ -26,7 +26,7 @@ const TopToolSpotlight = () => {
           <Users className="w-2 h-2" />
           Sign up
         </button>
-        <button className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 px-4 py-2 rounded-lg font-semibold transition duration-200 flex items-center gap-2 shadow-lg">
+        <button className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 px-4 py-2 rounded-lg font-semibold transition duration-200 flex items-center gap-2 shadow-lg cursor-pointer">
           <Gift className="w-4 h-4" />
           Claim 50 pts
         </button>
