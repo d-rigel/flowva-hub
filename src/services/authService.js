@@ -1,6 +1,19 @@
 import { supabase } from './supabase';
 
 
+const getURL = () => {
+  if (typeof window !== 'undefined') {
+    return window.location.origin;
+  }
+  return (
+    import.meta.env.VITE_SITE_URL ?? 
+    import.meta.env.VITE_VERCEL_URL ?? 
+    'http://localhost:5173/'
+  );
+};
+
+
+
 export const authService = {
   // Sign up new user
   signUp: async (email, password) => {
@@ -8,7 +21,7 @@ export const authService = {
       email,
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: `${getURL()}/auth/callback`,
         data: {
           first_name: email.split("@")[0],
         },
@@ -31,7 +44,7 @@ export const authService = {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${getURL()}/auth/callback`,
         queryParams: {
           access_type: "offline",
           prompt: "consent",
@@ -62,7 +75,7 @@ export const authService = {
   // Reset password (send email)
   resetPasswordForEmail: async (email) => {
     const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`,
+      redirectTo: `${getURL()}/reset-password`,
     });
     return { data, error };
   },
@@ -86,21 +99,3 @@ export const authService = {
   },
 };
 
-// export const authService = {
-//   // ... existing methods ...
-  
-
-//   resetPasswordForEmail: async (email) => {
-//     const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-//       redirectTo: `${window.location.origin}/reset-password`
-//     });
-//     return { data, error };
-//   },
-
-//   updatePassword: async (newPassword) => {
-//     const { data, error } = await supabase.auth.updateUser({
-//       password: newPassword
-//     });
-//     return { data, error };
-//   }
-// };
