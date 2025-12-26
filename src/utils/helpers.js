@@ -39,4 +39,15 @@ export const helpers = {
   sleep: (ms) => {
     return new Promise((resolve) => setTimeout(resolve, ms));
   },
+getURL: () => {
+  if (typeof window !== 'undefined') {
+    return window.location.origin;
+  }
+  return (
+    import.meta.env.VITE_SITE_URL ?? 
+    import.meta.env.VITE_VERCEL_URL ?? 
+    'http://localhost:5173/'
+  );
+}
+
 };

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../services/supabase';
 import { AlertCircle } from 'lucide-react';
+import { helpers } from '../../utils/helpers';
 
 
 const LoginPage = ({ onNavigate, onLogin }) => {
@@ -18,7 +19,6 @@ const LoginPage = ({ onNavigate, onLogin }) => {
     setLoading(true);
 
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    console.log("Login data:", data);
     
     setLoading(false);
 
@@ -36,7 +36,7 @@ const LoginPage = ({ onNavigate, onLogin }) => {
   const { data, error } = await supabase.auth.signInWithOAuth({ 
     provider: 'google',
     options: {
-      redirectTo: `${window.location.origin}/auth/callback`
+      redirectTo: `${helpers.getURL()}/auth/callback`
     }
     
   });

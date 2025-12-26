@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../services/supabase';
-import { AlertCircle, CheckCircle, Eye, EyeOff, Shield, ShieldOff } from 'lucide-react';
+import { AlertCircle, CheckCircle, Shield, ShieldOff } from 'lucide-react';
+import { helpers } from '../../utils/helpers';
 
 const SignUpPage = ({ onNavigate }) => {
   const [email, setEmail] = useState('');
@@ -149,7 +150,7 @@ const SignUpPage = ({ onNavigate }) => {
     const { data, error: oauthError } = await supabase.auth.signInWithOAuth({ 
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`
+        redirectTo: `${helpers.getURL()}/auth/callback`
       }
     });
     
